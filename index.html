@@ -24,5 +24,18 @@
   </section>
 
   <script src="script.js"></script>
+
+  <audio id="bgmusic" autoplay loop muted>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+</audio>
+
+<script>
+  document.body.addEventListener('click', function () {
+    const audio = document.getElementById('bgmusic');
+    audio.muted = false;
+    audio.play();
+  }, { once: true });
+</script>
+  
 </body>
 </html>
