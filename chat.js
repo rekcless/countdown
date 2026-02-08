@@ -37,13 +37,13 @@ if (savedUser) {
 registerBtn.onclick = async () => {
   const username = usernameAuth.value.trim();
   const password = passwordAuth.value.trim();
-  if (!username || !password) { alert("Isi semua!"); return; }
+  if (!username || !password){ alert("Isi semua!"); return; }
 
   const userDoc = doc(db, "users", username);
   const snap = await getDoc(userDoc);
-  if (snap.exists()) { alert("Username sudah dipakai!"); return; }
+  if (snap.exists()){ alert("Username sudah dipakai!"); return; }
 
-  await setDoc(userDoc, { username, password, friends: [] });
+  await setDoc(userDoc, {username, password, friends: []});
   alert("Register sukses! Silahkan login.");
 };
 
@@ -51,10 +51,10 @@ registerBtn.onclick = async () => {
 loginBtn.onclick = async () => {
   const username = usernameAuth.value.trim();
   const password = passwordAuth.value.trim();
-  if (!username || !password) { alert("Isi semua!"); return; }
+  if (!username || !password){ alert("Isi semua!"); return; }
 
   const snap = await getDoc(doc(db, "users", username));
-  if (!snap.exists() || snap.data().password !== password) { alert("Username/password salah"); return; }
+  if (!snap.exists() || snap.data().password !== password){ alert("Username/password salah"); return; }
 
   currentUser = username;
   localStorage.setItem("currentUser", username); // simpan session
@@ -68,50 +68,50 @@ async function loadFriends() {
   friendList.innerHTML = "";
   const snap = await getDoc(doc(db, "users", currentUser));
   const friends = snap.data().friends || [];
-  friends.forEach(f => {
+  friends.forEach(f=>{
     const li = document.createElement("li");
     li.textContent = f;
-    li.onclick = () => { openChat(f); }
+    li.onclick = ()=>{ openChat(f); }
     friendList.appendChild(li);
   });
 }
 
 // ===== ADD FRIEND =====
-addFriendBtn.onclick = async () => {
+addFriendBtn.onclick = async ()=>{
   const friendName = searchUser.value.trim();
-  if (!friendName || friendName === currentUser) { alert("Username tidak valid"); return; }
+  if(!friendName || friendName===currentUser){ alert("Username tidak valid"); return; }
 
-  const friendSnap = await getDoc(doc(db, "users", friendName));
-  if (!friendSnap.exists()) { alert("User tidak ditemukan"); return; }
+  const friendSnap = await getDoc(doc(db,"users",friendName));
+  if(!friendSnap.exists()){ alert("User tidak ditemukan"); return; }
 
-  await updateDoc(doc(db, "users", currentUser), { friends: arrayUnion(friendName) });
-  alert(friendName + " ditambahkan!");
-  searchUser.value = "";
+  await updateDoc(doc(db,"users",currentUser),{friends: arrayUnion(friendName)});
+  alert(friendName+" ditambahkan!");
+  searchUser.value="";
   loadFriends();
 };
 
 // ===== OPEN CHAT =====
-function openChat(friend) {
+function openChat(friend){
   currentChatFriend = friend;
   chatWithName.textContent = friend;
-  chatSection.style.display = "block";
+  chatSection.style.display="block";
   loadChat();
 }
 
-// ===== LOAD CHAT REALTIME + SCROLL =====
-function loadChat() {
-  chatBox.innerHTML = "";
-  const convoId = [currentUser, currentChatFriend].sort().join("_");
+// ===== LOAD CHAT REALTIME =====
+function loadChat(){
+  chatBox.innerHTML="";
+  const convoId = [currentUser,currentChatFriend].sort().join("_");
   const messagesCol = collection(db, "conversations", convoId, "messages");
   const q = query(messagesCol, orderBy("createdAt"));
 
-  onSnapshot(q, snap => {
-    chatBox.innerHTML = "";
-    snap.docs.forEach(d => {
+  onSnapshot(q,snap=>{
+    chatBox.innerHTML="";
+    snap.docs.forEach(d=>{
       const data = d.data();
       const div = document.createElement("div");
-      div.className = "message " + (data.sender === currentUser ? "self" : "other");
-      div.textContent = `${data.sender}: ${data.text}`;
+      div.className = "message "+(data.sender===currentUser?"self":"other");
+      div.textContent = data.text; // ✅ Hanya isi pesan
       chatBox.appendChild(div);
     });
 
@@ -124,15 +124,15 @@ function loadChat() {
 }
 
 // ===== SEND MESSAGE =====
-sendChatBtn.onclick = async () => {
+sendChatBtn.onclick=async ()=>{
   const text = chatMessage.value.trim();
-  if (!text || !currentChatFriend) { return; }
+  if(!text || !currentChatFriend) return;
 
-  const convoId = [currentUser, currentChatFriend].sort().join("_");
-  await addDoc(collection(db, "conversations", convoId, "messages"), {
+  const convoId = [currentUser,currentChatFriend].sort().join("_");
+  await addDoc(collection(db,"conversations",convoId,"messages"),{
     sender: currentUser,
     text,
     createdAt: new Date()
   });
-  chatMessage.value = "";
+  chatMessage.value="";
 };
