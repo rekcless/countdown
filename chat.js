@@ -14,6 +14,7 @@ const friendSection = document.getElementById("friendSection");
 const searchUser = document.getElementById("searchUser");
 const addFriendBtn = document.getElementById("addFriendBtn");
 const friendList = document.getElementById("friendList");
+const logoutBtn = document.getElementById("logoutBtn");
 
 const chatSection = document.getElementById("chatSection");
 const chatWithName = document.getElementById("chatWithName");
@@ -61,6 +62,20 @@ loginBtn.onclick = async () => {
   document.getElementById("authSection").style.display = "none";
   friendSection.style.display = "block";
   loadFriends();
+};
+
+// ===== LOGOUT =====
+logoutBtn.onclick = () => {
+  localStorage.removeItem("currentUser");
+  currentUser = null;
+  currentChatFriend = null;
+
+  friendSection.style.display = "none";
+  chatSection.style.display = "none";
+  document.getElementById("authSection").style.display = "block";
+
+  usernameAuth.value = "";
+  passwordAuth.value = "";
 };
 
 // ===== LOAD FRIENDS =====
@@ -111,7 +126,7 @@ function loadChat(){
       const data = d.data();
       const div = document.createElement("div");
       div.className = "message "+(data.sender===currentUser?"self":"other");
-      div.textContent = data.text; // ✅ Hanya isi pesan
+      div.textContent = data.text; // ✅ Hanya pesan, nama tidak ditampilkan
       chatBox.appendChild(div);
     });
 
