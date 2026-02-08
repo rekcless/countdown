@@ -11,6 +11,7 @@
 <header><h1>💬 Mini WA Web</h1></header>
 
 <main>
+  <!-- LOGIN / REGISTER -->
   <section id="authSection">
     <h2>Login / Register</h2>
     <input type="text" id="usernameAuth" placeholder="Username">
@@ -19,6 +20,7 @@
     <button id="registerBtn">Register</button>
   </section>
 
+  <!-- FRIEND LIST -->
   <section id="friendSection" style="display:none">
     <h2>Friends</h2>
     <input type="text" id="searchUser" placeholder="Cari username...">
@@ -26,6 +28,7 @@
     <ul id="friendList"></ul>
   </section>
 
+  <!-- CHAT -->
   <section id="chatSection" style="display:none">
     <h2>Chat dengan <span id="chatWithName"></span></h2>
     <div id="chatBox" class="chat-box"></div>
@@ -36,8 +39,9 @@
   </section>
 </main>
 
-<script type="module" src="chat.js"></script>
+<!-- 🔥 SCRIPT LOAD URUT BENAR -->
 <script type="module" src="firebase.js"></script>
+<script type="module" src="chat.js"></script>
 
 </body>
 </html>
