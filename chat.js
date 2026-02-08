@@ -59,9 +59,7 @@ async function loadFriends(){
   friends.forEach(f=>{
     const li = document.createElement("li");
     li.textContent=f;
-    li.onclick = ()=>{
-      openChat(f);
-    }
+    li.onclick = ()=>{openChat(f);}
     friendList.appendChild(li);
   });
 }
@@ -119,4 +117,4 @@ sendChatBtn.onclick=async()=>{
     createdAt: new Date()
   });
   chatMessage.value="";
-    }
+}
